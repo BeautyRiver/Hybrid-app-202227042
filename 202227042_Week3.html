@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .templete {
+            height: 800px;
+            width: 800px;
+            background-color: beige;
+        }
+
+        .top {
+            background-color: skyblue;
+            width: 800px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+
+        .left,
+        .right {
+            height: 800px;
+            float: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .left {
+            background-color: aquamarine;
+            width: 300px;
+        }
+
+        .right {
+            background-color: plum;
+            width: 500px;
+        }
+
+        .btns,
+        #loginBtn {
+            width: 100px;
+            height: 50px;
+        }
+
+        .top h2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #loginInput {
+            margin: 10px;
+        }
+
+        #profilePic {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            margin-right: 15px;
+            display: none;
+        }
+
+        #loginBtn {
+            height: 30px;
+            margin-left: 15px;
+        }
+
+        #textbox {
+            width: 400px;
+            height: 400px;            
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+
+    </script>
+
+    <div class="templete">
+        <div class="top">
+            <h2>
+                <img id="profilePic" src="https://via.placeholder.com/50" alt="Profile Picture">
+                <span id="welcomeMsg">로그인</span>
+                <input id="loginInput" type="text"><input id="loginBtn" type="button" value="Login">
+            </h2>
+        </div>
+        <div class="mid">
+            <div class="left">
+                <input class="btns" id="btn1" type="button" value="버튼1">
+                <input class="btns" id="btn2" type="button" value="버튼2">
+                <input class="btns" id="btn3" type="button" value="버튼3">
+            </div>
+            <div class="right">
+                <textarea name="" id="textbox"></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let isLoggedIn = false;
+
+        function toggleLogin() {
+            //로그아웃 상태일때
+            if (!isLoggedIn) {
+                var username = document.getElementById('loginInput').value;
+                if (username != '') {
+                    isLoggedIn = true;
+                    document.getElementById('loginInput').style.display = 'none';
+                    document.getElementById('welcomeMsg').textContent = username + '님';
+                    document.getElementById('profilePic').style.display = 'inline-block';
+                    document.getElementById('loginBtn').value = 'Logout';
+                }
+                else {
+                    alert('해당 아이디는 없습니다.');
+                }
+            }
+            //로그인 상태일때
+            else {
+                isLoggedIn = false;
+                document.getElementById('loginInput').style.display = 'inline-block';
+                document.getElementById('welcomeMsg').textContent = '로그인';
+                document.getElementById('profilePic').style.display = 'none';
+                document.getElementById('loginBtn').value = 'Login';
+            }
+        }
+
+        document.getElementById('loginBtn').addEventListener('click', toggleLogin);
+
+        // 버튼에 대한 내용을 저장할 객체
+        let btnContents = {
+            btn1: "안녕하세요 저는 유한대학교 컴퓨터소프트웨어공학과게임콘텐츠전공과인 김민강 입니다. ",
+            btn2: "...",
+            btn3: ""
+        };
+
+        let textbox = document.getElementById('textbox');
+
+        function ButtonClick(btnId) {            
+            if (btnContents[btnId] === "") {
+                // textbox의 내용이 '저장되었습니다.' 또는 비어있을 때 예외 처리
+                if (textbox.value === "저장되었습니다." || textbox.value === "") {
+                    alert("내용이 없습니다.");
+                    return;
+                }
+
+                // 다른 버튼의 내용과 textbox의 내용이 일치하는지 확인하고, 일치하면 내용을 교환
+                for (let otherBtnId in btnContents) {
+                    if (btnContents[otherBtnId] === textbox.value) {
+                        btnContents[btnId] = textbox.value;
+                        btnContents[otherBtnId] = "";
+                        textbox.value = "저장되었습니다.";
+                        return;
+                    }
+                }
+            } 
+            textbox.value = btnContents[btnId];
+        }
+
+        document.getElementById('btn1').addEventListener('click', function () {
+            ButtonClick('btn1');
+        });
+
+        document.getElementById('btn2').addEventListener('click', function () {
+            ButtonClick('btn2');
+        });
+
+        document.getElementById('btn3').addEventListener('click', function () {
+            ButtonClick('btn3');
+        });
+
+    </script>
+
+</body>
+
+</html>
