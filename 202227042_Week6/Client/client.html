@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+    <style>
+        body{            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #main{
+            margin-top: 50px;
+            width: 500px;
+            height: 300px;
+            text-align: center;       
+            border: 3px solid black;     
+        }
+
+        hr{
+            height: 2px;
+            background-color: black;
+            margin-bottom: 30px;
+        }
+
+        #main h4, #main p{
+            display: inline-block;
+        }
+
+        #hiApi_btn {
+            width: 110px;
+            height: 70px;
+            border-radius: 15px;
+        }
+
+        #hiApi_btn:active {
+            background-color: antiquewhite;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <h2>Client 화면</h2>
+        <b>202227042 김민강</b>
+        <hr>
+        <button id="hiApi_btn">HiURL 서버에 요청하기</button>
+        <br><br><br>
+        <h4>현재 Data:&nbsp</h4><p id="data">없음</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
