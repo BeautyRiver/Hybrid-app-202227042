@@ -60,10 +60,16 @@ window.onload = function () {
   inGame.style.display = "none";
 };
 
-// 마우스 이벤트 리스너
+// 현재: 캔버스 내부의 마우스 움직임만 추적
 canvas.addEventListener("mousemove", (event) => {
-  lastMousePos = getMousePos(canvas, event); // 마우스 움직임 감지
+  lastMousePos = getMousePos(canvas, event);
 });
+
+// 변경: 문서 전체의 마우스 움직임 추적
+document.addEventListener("mousemove", (event) => {
+  lastMousePos = getMousePos(canvas, event);
+});
+
 
 canvas.addEventListener("mousedown", () => {
   isFast = true; // 마우스 클릭 시 가속
@@ -134,12 +140,13 @@ function getMousePos(canvas, event) {
   };
 }
 
-// 랜덤 위치 생성 함수
+// 사과 랜덤 위치 생성 함수
 function getRandomPosition() {
-  const x = Math.random() * (canvas.width - 10 * appleRadius) + appleRadius;
-  const y = Math.random() * (canvas.height - 10 * appleRadius) + appleRadius;
+  const x = Math.random() * (canvas.width - 30 * appleRadius) + 15 * appleRadius;
+  const y = Math.random() * (canvas.height - 30 * appleRadius) + 15 * appleRadius;
   return { x, y };
 }
+
 
 // 이징 관련 변수
 let easeAmount = 0.1; // 이징이 적용되는 정도 (0 ~ 1 사이의 값)
@@ -350,10 +357,19 @@ function checkObsCollisions() {
 /* 그리기 관련 함수들 -----------------------------------------*/
 // 뱀 그리기 함수
 function drawSnake() {
-  for (let segment of snake) {
+  // 먼저 뱀 머리를 그림
+  ctx.beginPath();
+  ctx.arc(snake[0].x, snake[0].y, snakeRadius, 0, Math.PI * 2);
+  ctx.fillStyle = "#222A0A"; // 뱀 머리 색상을 노란색으로 변경  
+  ctx.fill();
+  
+  ctx.closePath();
+
+  // 나머지 뱀 몸통 부분을 그림
+  for (let i = 1; i < snake.length; i++) { // i를 1부터 시작
     ctx.beginPath();
-    ctx.arc(segment.x, segment.y, snakeRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "green";
+    ctx.arc(snake[i].x, snake[i].y, snakeRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "green"; // 나머지 부분은 기존 색상으로 유지
     ctx.fill();
     ctx.closePath();
   }
@@ -391,9 +407,6 @@ function drawApple() {
   ctx.fill();
   ctx.closePath();
 }
-
-
-
 
 // 장애물 그리기 함수
 function drawObstacles() {
@@ -465,8 +478,7 @@ function gameLoop() {
       createObstacle();
     }
     updateObstacles();
-    render();
-
+    render();    
     requestAnimationFrame(gameLoop); // 다음 애니메이션 프레임 요청
   }
 }
@@ -493,9 +505,8 @@ function gameOver() {
 // 재시작 함수
 function restartGame() {
   // 게임 상태 초기화
-  let obstacleChance = 0.01;
-  // 최대 장애물 수
-  let maxObstacles = 10;
+  obstacleChance = 0.01; // 'let' 키워드 제거하여 전역 변수를 참조하도록 변경
+  maxObstacles = 10; // 'let' 키워드 제거하여 전역 변수를 참조하도록 변경
 
   // 난이도 설정 초기화
   maxSize = 10;
@@ -503,6 +514,8 @@ function restartGame() {
 
   maxSpeed = 1.0;
   minSpeed = 0.5;
+
+  lastDifficultyIncrease = 0; // 난이도 증가 시간을 초기화
 
   gameStarted = true;
   isFast = false;
@@ -516,4 +529,8 @@ function restartGame() {
   obstacles = [];
   lastMousePos = { x: canvas.width / 2, y: canvas.height / 2 };
   startTime = Date.now(); // 게임 시작 시간을 재설정
+
+  // 게임 루프를 다시 시작
+  //requestAnimationFrame(gameLoop);
 }
+
